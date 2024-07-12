@@ -1,0 +1,32 @@
+services:
+  www:
+    image: baldosa/easyappointments
+    ports:
+      - "8001:80"
+    volumes:
+      - ./config.php:/var/www/html/config.php
+    links:
+      - db
+    networks:
+      - default
+  db:
+    image: mariadb
+    ports:
+      - "33006:3306"
+    environment:
+      - MYSQL_DATABASE=easyappointments
+      - MYSQL_USER=easyappointments
+      - MYSQL_PASSWORD=easyappointmentsw
+      - MARIADB_RANDOM_ROOT_PASSWORD=true
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db:db
+    ports:
+      - 8009:80
+volumes:
+  db_data:
